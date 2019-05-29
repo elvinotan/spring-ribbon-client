@@ -141,6 +141,6 @@ public Map<String, Object> feignGetCallback() {
 	return map;
 }
 ```
-# note
+# Note
 Sebenarnya option dari hystrix masih banyak lagi, sperti apabila dalam 5 menit terjadi 20 error maka circuit break akan open dan fallbackMethod akan di panggil, ada juga circuit yang open akan dipertahankan selam 2 menit setelah itu akan di coba close kembali
 
