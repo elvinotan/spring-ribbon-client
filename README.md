@@ -27,3 +27,20 @@ public class SpringRibbonClientApplication {
 	}
 }
 ```
+3. Buat RestController sebagai entrypoint yang memanggil method yang ada di SpringRibbonServer
+```
+@SpringBootApplication
+@EnableDiscoveryClient
+public class SpringRibbonClientApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SpringRibbonClientApplication.class, args);
+	}
+
+	@Bean
+	@LoadBalanced
+	public RestTemplate restTemplate() {
+	    return new RestTemplate();
+	}
+}
+```
