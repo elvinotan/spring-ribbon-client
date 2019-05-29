@@ -29,18 +29,19 @@ public class SpringRibbonClientApplication {
 ```
 3. Buat RestController sebagai entrypoint yang memanggil method yang ada di SpringRibbonServer
 ```
-@SpringBootApplication
-@EnableDiscoveryClient
-public class SpringRibbonClientApplication {
+@RestController
+public class SpringRibbonRestClient {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SpringRibbonClientApplication.class, args);
-	}
-
-	@Bean
-	@LoadBalanced
-	public RestTemplate restTemplate() {
-	    return new RestTemplate();
+	@Autowired
+	private RestTemplate restTemplate;
+	
+	@GetMapping("/client")
+	public String client() {
+		String hasil = restTemplate.getForObject("http://SPRINGRIBBONSERVER/fetch", String.class);
+		return hasil;
 	}
 }
 ```
+4. Lakukan testing dengan menggunakan postman
+# Note
+Untuk testing ini bisa berjalan, maka pada SpringRibbonServer harus dijalankan lebih dari satu instance dengan port yang berbeda, laku kita lakukan command call dgn menggunkan RestTemplate dgn format http://{spring-ribbon-server}/{commmand}. Bila anda perhatikan pada command tersebut tidak di sertakan port
