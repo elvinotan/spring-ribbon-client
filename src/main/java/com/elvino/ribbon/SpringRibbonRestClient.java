@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
 @RestController
 public class SpringRibbonRestClient {
 
@@ -28,6 +30,7 @@ public class SpringRibbonRestClient {
 		return springRibbon.fetch();
 	}
 	
+	@HystrixCommand(groupKey="fallback", commandKey="feignGet", fallbackMethod="feignGetCallback")
 	@GetMapping("/feign/feignGet")
 	public Map<String, Object> feignGet() {
 		return springRibbon.feignGet(40L, "Constantine Davin Ethan");
@@ -39,5 +42,12 @@ public class SpringRibbonRestClient {
 		param.put("first", "pertama");
 		param.put("second","kedua");
 		return springRibbon.feignPost(45L, param);
+	}
+	
+	public Map<String, Object> feignGetCallback() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("fallback", "true");
+		map.put("error", "Hytrix error accured");
+		return map;
 	}
 }
