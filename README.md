@@ -90,20 +90,8 @@ public interface SpringRibbonInterface {
 SpringRibbonServer merupakan nama dari service yang akan kita panggil
 3. Panggil method yang sudah di jalabarkan di interface
 ```
-@RestController
-public class SpringRibbonRestClient {
-
-	@Autowired
-	private RestTemplate restTemplate;
-	
 	@Autowired
 	private SpringRibbonInterface springRibbon;
-	
-	@GetMapping("/client")
-	public String client() {
-		String hasil = restTemplate.getForObject("http://SPRINGRIBBONSERVER/fetch", String.class);
-		return hasil;
-	}
 	
 	@GetMapping("/feign/client")
 	public String feignClient() {
@@ -122,5 +110,6 @@ public class SpringRibbonRestClient {
 		param.put("second","kedua");
 		return springRibbon.feignPost(45L, param);
 	}
-}
 ```
+# Note
+Keuntungan menggunakan feign adalah, feign sudah men-support Ribbon (Load Balancer) dan mempermudah unit testing
