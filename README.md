@@ -87,7 +87,7 @@ public interface SpringRibbonInterface {
 	public Map<String, Object> feignPost(@PathVariable("nomor") Long nomor, @RequestBody Map<String, Object> param);
 }
 ```
-SpringRibbonServer merupakan nama dari service yang akan kita panggil
+SpringRibbonServer merupakan nama dari service yang akan kita panggil</br>
 3. Panggil method yang sudah di jalabarkan di interface
 ```
 	@Autowired
