@@ -47,6 +47,8 @@ public class SpringRibbonRestClient {
 Untuk testing ini bisa berjalan, maka pada SpringRibbonServer harus dijalankan lebih dari satu instance dengan port yang berbeda, laku kita lakukan command call dgn menggunkan RestTemplate dgn format http://{spring-ribbon-server}/{commmand}. Bila anda perhatikan pada command tersebut tidak di sertakan port
 
 # Add Feign Support
+Feign adalah suatu shorthand, untuk memudahkan kita memanggil rest endpoint dengan membuat inferce, layaknya spring Data
+
 # Dependencies
 Eureka Discovery</br>
 Web</br>
@@ -115,6 +117,8 @@ SpringRibbonServer merupakan nama dari service yang akan kita panggil</br>
 Keuntungan menggunakan feign adalah, feign sudah men-support Ribbon (Load Balancer) dan mempermudah unit testing
 
 # Add Hytrix Support
+Hytrix adalah framework yang bertujuan untuk menghandle error yang terjadi pada aplikasi, logika Hystrix sama dengan logika saklar di rumah
+
 # Dependencies
 Eureka Discovery</br>
 Web</br>
@@ -145,3 +149,36 @@ public Map<String, Object> feignGetCallback() {
 Sebenarnya option dari hystrix masih banyak lagi, sperti apabila dalam 5 menit terjadi 20 error maka circuit break akan open dan fallbackMethod akan di panggil, ada juga circuit yang open akan dipertahankan selam 2 menit setelah itu akan di coba close kembali</br>
 Untuk memonitor fallback bisa menggunakan Hytrix Dashboard/ Turbine (Belum di explor)
 
+# Add Spring Bus Support
+Spring Bus memungkinkan bila ada perubahan di file configurasi langsung di sebarkan perubahan tersebut kepada client yang mendengarkan dengan @RefreshScope. Cara kerja dari Spring Bus ini adalah, saat file configursi telah di ubah, lalu kita lakukan server config : post refresh, lalu pesan tersebut di teruskan melalui amqp (Ex:RabbitMQ), dan semua client yang memiliki dependenciy spring bus dan acuator akan otomatis menerima perubahan tersebut
+
+# Dependencies
+Actuator</br>
+Spring Bus</br>
+
+# How to
+Pada tahap ini, perubahan yang dilakukan tidak hanya pada satu project tapi dari beberpa project, terutama pada Spring Config Server, krn trigger perubahan akan dilakukan pada Spring Config Server (Yg memberi perintah untuk reload change)
+1. Pada Spring Config Server, tambahan 2 dependencies. Sama halnya dengan client yang akan menerima perubahan tersebut
+```
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.springframework.cloud</groupId>
+	<artifactId>spring-cloud-starter-bus-amqp</artifactId>
+</dependency>
+```
+2. Spring Bus ini memerukan teknologi lain untuk berfungsi yaitu amqp framework, maka dari itu install RabbitMQ
+3. Untuk mentrigger perubahan configurasi maka kita harus jalankan perintah POST http://{host}:{port}/actuator/bus-refresh pada Server Config
+4. Perubahan akan di terima oleh Client, jgn lupa untuk menambahkan @RefreshScope pada client
+
+# Note
+Untuk menjalankan bus-refresh di butuhkan hak access POST, maka kita harus menambahkan hak tersebut 
+```
+management:
+  endpoints:
+    web:
+      exposure:
+        include: bus-refresh,refresh
+```
