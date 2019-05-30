@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,7 +24,8 @@ public class SpringRibbonRestClient {
 	
 	@GetMapping("/client")
 	public String client() {
-		String hasil = restTemplate.getForObject("http://SPRINGRIBBONSERVER/fetch", String.class);
+		String hasil = restTemplate.getForObject("http://SPRINGZULL/springribbonserver/fetch", String.class);
+		//String hasil = restTemplate.getForObject("http://SPRINGRIBBONSERVER/fetch", String.class);
 		return hasil;
 	}
 	
@@ -38,7 +40,7 @@ public class SpringRibbonRestClient {
 		return springRibbon.feignGet(40L, "Constantine Davin Ethan");
 	}
 	
-	@GetMapping("/feign/feignPost")
+	@PostMapping("/feign/feignPost")
 	public Map<String, Object> feignPost() {
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("first", "pertama");

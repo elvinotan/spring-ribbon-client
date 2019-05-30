@@ -9,15 +9,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient("SpringRibbonServer")
+@FeignClient("SpringZull")
+//@FeignClient("SpringRibbonServer")
 public interface SpringRibbonInterface {
 
-	@GetMapping("/fetch")
+	@GetMapping("/springribbonserver/fetch")
+	//@GetMapping("/fetch")
 	public String fetch();
 	
-	@GetMapping("/feignGet/{nomor}")
+	@GetMapping("/springribbonserver/feignGet/{nomor}")
+	//@GetMapping("/feignGet/{nomor}")
 	public Map<String, Object> feignGet(@PathVariable("nomor") Long nomor, @RequestParam("nama") String nama);
 	
-	@PostMapping("/feignPost/{nomor}")
+	@PostMapping("/springribbonserver/feignPost/{nomor}")
+	//@PostMapping("/feignPost/{nomor}")
 	public Map<String, Object> feignPost(@PathVariable("nomor") Long nomor, @RequestBody Map<String, Object> param);
 }
