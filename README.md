@@ -182,3 +182,4 @@ management:
       exposure:
         include: bus-refresh,refresh
 ```
+kadang pada tutorial di youtube atau yang lain, mereka menyarankan untuk memasang management.security.enabled=false. Tapi property ini sudah depricated
