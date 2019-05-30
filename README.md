@@ -46,7 +46,7 @@ public class SpringRibbonRestClient {
 # Note
 Untuk testing ini bisa berjalan, maka pada SpringRibbonServer harus dijalankan lebih dari satu instance dengan port yang berbeda, laku kita lakukan command call dgn menggunkan RestTemplate dgn format http://{spring-ribbon-server}/{commmand}. Bila anda perhatikan pada command tersebut tidak di sertakan port
 
-# Converting RestTemplate, and Using Feign
+# Add Feign Support
 # Dependencies
 Eureka Discovery</br>
 Web</br>
@@ -113,3 +113,35 @@ SpringRibbonServer merupakan nama dari service yang akan kita panggil</br>
 ```
 # Note
 Keuntungan menggunakan feign adalah, feign sudah men-support Ribbon (Load Balancer) dan mempermudah unit testing
+
+# Add Hytrix Support
+# Dependencies
+Eureka Discovery</br>
+Web</br>
+Config Client</br>
+Feign</br>
+Hystrix</br>
+
+# How to
+1. Tambahkan @EnableHystrix pada SpringApplication Class
+2. Tambahkan anotation pada method yang mau di jaga apabila terjadi error
+```
+@HystrixCommand(groupKey="fallback", commandKey="feignGet", fallbackMethod="feignGetCallback")
+@GetMapping("/feign/feignGet")
+public Map<String, Object> feignGet() {
+	return springRibbon.feignGet(40L, "Constantine Davin Ethan");
+}
+```
+untuk groupKey dan commandKey saat ini masih blm tau kegunaanya, tp spring menyediakn hystrix dashboard, sepertinya ini hanya sebagai log saja, untuk fallbackMethod, adalah method yang akan di panggil apabila terjadi error
+```
+public Map<String, Object> feignGetCallback() {
+	Map<String, Object> map = new HashMap<String, Object>();
+	map.put("fallback", "true");
+	map.put("error", "Hytrix error accured");
+	return map;
+}
+```
+# Note
+Sebenarnya option dari hystrix masih banyak lagi, sperti apabila dalam 5 menit terjadi 20 error maka circuit break akan open dan fallbackMethod akan di panggil, ada juga circuit yang open akan dipertahankan selam 2 menit setelah itu akan di coba close kembali</br>
+Untuk memonitor fallback bisa menggunakan Hytrix Dashboard/ Turbine (Belum di explor)
+
