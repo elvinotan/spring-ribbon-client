@@ -170,8 +170,9 @@ Pada tahap ini, perubahan yang dilakukan tidak hanya pada satu project tapi dari
 </dependency>
 ```
 2. Spring Bus ini memerukan teknologi lain untuk berfungsi yaitu amqp framework, maka dari itu install RabbitMQ
-3. Untuk mentrigger perubahan configurasi maka kita harus jalankan perintah POST http://{host}:{port}/actuator/bus-refresh pada Server Config
-4. Perubahan akan di terima oleh Client, jgn lupa untuk menambahkan @RefreshScope pada client
+3. Pada Saat Server Config di hidupakan, Perhatikan dia akan mencoba untuk berkomunikasi dengan RabbitMQ Server
+4. Untuk mentrigger perubahan configurasi maka kita harus jalankan perintah POST http://{host}:{port}/actuator/bus-refresh pada Server Config
+5. Perubahan akan di terima oleh Client, jgn lupa untuk menambahkan @RefreshScope pada client
 
 # Note
 Untuk menjalankan bus-refresh di butuhkan hak access POST, maka kita harus menambahkan hak tersebut 
